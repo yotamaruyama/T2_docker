@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Machine Operational Rate</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<h1>Machine Operational Rate</h1>
+
+<select id="time_scale">
+    <option value="hour">Hour</option>
+    <option value="day">Day</option>
+    <option value="month">Month</option>
+</select>
+
+<!-- グラフを表示する要素 -->
+<canvas id="myChart" width="400" height="200"></canvas>
+
+<script>
+// 初期化時に空のグラフを生成
+let myChart;
+let ctx = document.getElementById('myChart').getContext('2d');
+myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: [],
+        datasets: [{
+            label: 'Operational Rate (%)',
+            data: [],
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true,
+                max: 100 // as it's a rate in percentage
+            }
+        }
+    }
+});
+
+// タイムスケールが変更されたときにデータを取得
+$(document).ready(function(){
+    $('#time_scale').change(function(){
+        const timeScale = $(this).val();
+        $.get('/occupancy_rate/', {time_scale: timeScale}, function(data){
+            // グラフを更新
+            myChart.data.labels = data.labels;
+            myChart.data.datasets[0].data = data.values;
+            myChart.update();
+        });
+    });
+});
+</script>
+
+</body>
+</html>

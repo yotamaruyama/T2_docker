@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'occupancy_rate.apps.OccupancyRateConfig', #プロジェクトにアプリを認識させる
 ]
 
 MIDDLEWARE = [
@@ -54,7 +55,7 @@ ROOT_URLCONF = 'T2.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],#テンプレートファイルの場所を指定
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
