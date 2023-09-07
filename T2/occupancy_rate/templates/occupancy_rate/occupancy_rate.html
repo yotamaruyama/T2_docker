@@ -44,16 +44,24 @@ myChart = new Chart(ctx, {
     }
 });
 
+// Function to update chart
+function updateChart(timeScale) {
+    $.get('/occupancy_rate/', {time_scale: timeScale}, function(data){
+        // グラフを更新
+        myChart.data.labels = data.labels;
+        myChart.data.datasets[0].data = data.values;
+        myChart.update();
+    });
+}
+
+// 初期ロード時にグラフを表示
+updateChart('hour');
+
 // タイムスケールが変更されたときにデータを取得
 $(document).ready(function(){
     $('#time_scale').change(function(){
         const timeScale = $(this).val();
-        $.get('/occupancy_rate/', {time_scale: timeScale}, function(data){
-            // グラフを更新
-            myChart.data.labels = data.labels;
-            myChart.data.datasets[0].data = data.values;
-            myChart.update();
-        });
+        updateChart(timeScale);
     });
 });
 </script>
