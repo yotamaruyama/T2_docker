@@ -47,6 +47,10 @@ myChart = new Chart(ctx, {
 // Function to update chart
 function updateChart(timeScale) {
     $.get('/occupancy_rate/', {time_scale: timeScale}, function(data){
+
+        // デバッグ用
+        console.log("Received data:", data);
+
         // グラフを更新
         myChart.data.labels = data.labels;
         myChart.data.datasets[0].data = data.values;

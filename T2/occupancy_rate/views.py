@@ -37,6 +37,10 @@ class MachineDataView(View):
             'labels': list(rate_dict.keys()),
             'values': list(rate_dict.values()),
         }
+
+        # デバッグ用
+        print("rate_dict:", rate_dict)
+        print("data:", data)
         
         # Pass the data to the template and render it
         return render(request, 'occupancy_rate/occupancy_rate.html', {'data': data})
