@@ -4,6 +4,7 @@ from django.utils import timezone
 from .models import MachineData
 from datetime import timedelta
 from django.shortcuts import render
+import json  # 追加
 
 class MachineDataView(View):
     def get(self, request, *args, **kwargs):
@@ -38,9 +39,14 @@ class MachineDataView(View):
             'values': list(rate_dict.values()),
         }
 
-        # デバッグ用
-        print("rate_dict:", rate_dict)
-        print("data:", data)
+        # デバッグ用出力
+        print("rate_dict:", json.dumps(rate_dict))
+        print("data:", json.dumps(data))
         
-        # Pass the data to the template and render it
-        return render(request, 'occupancy_rate/occupancy_rate.html', {'data': data})
+        # Acceptヘッダーを確認してレスポンス形式を決定
+        accept_header = request.META.get('HTTP_ACCEPT', '')
+        
+        if 'application/json' in accept_header:
+            return JsonResponse(data)
+        else:
+            return render(request, 'occupancy_rate/occupancy_rate.html', {'data': data})
